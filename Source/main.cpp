@@ -94,6 +94,7 @@ int main(int argc, char **argv)
     }
 
   // Print result
+  std::cout << "The Minimum Found is    " << std::endl;
   std::cout << "x =    " << std::endl;
   for(auto i:sol) {
       std::cout << i << std::endl;
