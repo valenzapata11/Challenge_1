@@ -1,3 +1,0 @@
-C:/Users/valen/OneDrive - Universidad de los Andes/A1S2/Advanced Programming for Scientific Computing/Challenges/Challenge_1/cmake-build-debug/CMakeFiles/Challenge_1.dir
-C:/Users/valen/OneDrive - Universidad de los Andes/A1S2/Advanced Programming for Scientific Computing/Challenges/Challenge_1/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/valen/OneDrive - Universidad de los Andes/A1S2/Advanced Programming for Scientific Computing/Challenges/Challenge_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
