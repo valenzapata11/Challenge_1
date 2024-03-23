@@ -4,6 +4,7 @@
 
 
 class Amijo: public UpdateRule{
+   //class members
     const double sigma;
     const int max_iter;
     double h;
@@ -13,6 +14,7 @@ class Amijo: public UpdateRule{
     std::function<vector(const std::function<double(const vector)> &fun, const vector &x, const double &h)> grf;
     public:
     using UpdateRule::UpdateRule; //Inheritance of constructor
+    // class constructors
     Amijo(const std::function<double(const vector)> &fun_,
           const std::function<vector(const std::function<double(const vector)> &fun, const vector &x, const double &h)> &grf_,
           const double a0, double h) :UpdateRule(a0),

@@ -31,6 +31,6 @@ public:
 
     void set_h(double &h_i){h=h_i;}
 
-    //virtual vector solve(const vector &x0, const T &ak_ob);
+
 
 };

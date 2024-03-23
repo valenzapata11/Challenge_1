@@ -8,9 +8,11 @@ class UpdateRule{
     double a0;
     const double mu;
     public:
+    // class Constructors
     UpdateRule(double a0, const double mu):a0(a0),mu(mu){}; 
-    explicit UpdateRule(double a0):a0(a0),mu(0.01){};//Set constructors
 
+    explicit UpdateRule(double a0):a0(a0),mu(0.01){};//Set constructors
+    // virtual method to calculate ak
     virtual double calculate_step(const std::vector<double> &xk, int k) const =0;
 
 };

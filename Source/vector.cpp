@@ -3,7 +3,7 @@
 #include <cmath>
 #include "vector.hpp"
 
-
+//namespace created to do math operations with vectors
 namespace v{
 
     typedef std::vector<double> vector;
