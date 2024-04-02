@@ -16,6 +16,9 @@ namespace v{
     }
 
     vector sum(const vector &v1, const vector &v2){
+        //@todo you should use the size_t type for the size of the vector
+        //std::size_t s(std::max(v1.size(),v2.size()));
+        // or just use auto. The compiler will deduce the type
         int s(std::max(v1.size(),v2.size()));
         vector v3(s,0);
         for (std::size_t i=0; i<s;++i){
