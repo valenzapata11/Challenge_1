@@ -17,7 +17,7 @@
 
 
 namespace algebra
-{
+{   //Comparator for the map depending of storage order
     struct Comp{
         explicit Comp(bool row): row(row){};
         Comp(): row(true){};
@@ -25,8 +25,10 @@ namespace algebra
         bool operator()(std::array<std::size_t,2> lhs, std::array<std::size_t,2> rhs) const
         {
             if(row){
+                //if storage order is row, the vector of keys will be read lexicographically
                 return std::lexicographical_compare(lhs.cbegin(), lhs.cend(), rhs.cbegin(),rhs.cend());
             }else{
+                //if storage order is column, the vector of keys will be read lexicographically but in reverse order
                 return std::lexicographical_compare(lhs.rbegin(), lhs.rend(), rhs.rbegin(),rhs.rend());
             }
 
@@ -47,6 +49,7 @@ namespace algebra
         //Constructor
         Matrix(size_t r, size_t c, int resize_m):
         n_rows(r), n_cols(c),nz(r*c), compressed(false), s_order(So){
+             //Depending of the storage order the map will be initialized differently
           if (s_order==1){
               sparse_t n(Comp(false));
               map=n;
@@ -60,7 +63,7 @@ namespace algebra
           }
 
         }
-        // Default constructor for matrix reading from file
+        // Default constructor for matrix that later will be filled with info of a file
         Matrix():
                 n_rows(0), n_cols(0),nz(0), compressed(false), s_order(So){
             if (s_order==1){
@@ -263,7 +266,6 @@ namespace algebra
 
 
         //Matrix vector product
-        //template<class U,int O> CODIGO ejemplo
         friend std::vector<T>
         operator*(Matrix<T,So> &M, const std::vector<T> &x){
             std::vector<T> result(x.size(), 0);
@@ -322,7 +324,7 @@ namespace algebra
                     }
 
                     else{
-
+                        //column order
                         for (auto j = l_bound; j != up_bound; j++) {
                             size_t column_idx(j->first[0]);
                             result[column_idx]+=x[column]*(j->second);
@@ -383,14 +385,12 @@ namespace algebra
                 outer.reserve(n_rows);
             }
             values.reserve(nz);
-            //std::cout<<"rows " << n_rows << std::endl;
-            //std::cout<<"cols " << n_cols << std::endl;
-            //std::cout<<"nz " << nz << std::endl;;
-
+            //read line by line
             for(size_t l=0;l<nz;l++){
                 size_t row, col;
                 double v;
                 file >> row>> col >>v;
+                //fill the matrix
                 (*this)(row-1,col-1)=v;
             }
 
