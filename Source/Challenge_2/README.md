@@ -6,6 +6,8 @@ Storage Order (0 for row-wise storage and 1 for column-wise storage).
 
 The class allows the user to:
 - Compress/Uncompress the matrix
+- Extract matrix size
+- Know the matrix state (Compressed/Uncompressed)
 - Fill matrix from .mtx file
 - Access elements with operator ()
 - Vector Matrix multiplication
