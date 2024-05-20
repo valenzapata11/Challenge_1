@@ -367,6 +367,8 @@ namespace algebra
         friend Matrix<T,So>
         operator*(Matrix<T,So> &M, const Matrix<T,So> &x){
             //Matrix Matrix mult only for single vector matrices
+            //@note this is a trick! Ok, you are reusing the same operator, which saves coding
+            // but you should check that x has the correct dimension.
             if (x.is_compressed()){
                 std::vector<T> x1(x.values);
                 return M*x1;
