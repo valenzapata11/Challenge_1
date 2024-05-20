@@ -4,7 +4,7 @@
 
 #ifndef CHALLENGE_2_MATRIX_H
 #define CHALLENGE_2_MATRIX_H
-
+// clang-format off
 #endif //CHALLENGE_2_MATRIX_H
 
 #include <vector>
@@ -25,10 +25,16 @@ namespace algebra
         bool operator()(std::array<std::size_t,2> lhs, std::array<std::size_t,2> rhs) const
         {
             if(row){
+                //@note this is the default ofr an array, It is sufficient to do this
+                // return lhs < rhs;
                 //if storage order is row, the vector of keys will be read lexicographically
                 return std::lexicographical_compare(lhs.cbegin(), lhs.cend(), rhs.cbegin(),rhs.cend());
             }else{
                 //if storage order is column, the vector of keys will be read lexicographically but in reverse order
+                //@note I like your use of a standard algorithm. Here, however, there is a trick you can use, expoiting std::tie:
+                // return std::tie(lhs[1], lhs[0]) < std::tie(rhs[1], rhs[0]); 
+                // std::tie builds a tuple of references, and lexicographic comparision is implemented by default for
+                // tuples.
                 return std::lexicographical_compare(lhs.rbegin(), lhs.rend(), rhs.rbegin(),rhs.rend());
             }
 
@@ -37,6 +43,9 @@ namespace algebra
         bool row;
     };
 
+//@note To indicate the storage ordering instead of an int you can use an enumerator to make the code more readable
+//enum class StorageOrder {Row, Column};
+//template <class T, StorageOrder So>... etc
     template <class T, int So>
     class Matrix final {
 
@@ -50,6 +59,10 @@ namespace algebra
         Matrix(size_t r, size_t c, int resize_m):
         n_rows(r), n_cols(c),nz(r*c), compressed(false), s_order(So){
              //Depending of the storage order the map will be initialized differently
+          // So is a template parameter value, so it is known at compile time
+          // therefore you can use if constexpr to make the code more efficient
+          //  if constexpr (So==1){
+       
           if (s_order==1){
               sparse_t n(Comp(false));
               map=n;
@@ -95,10 +108,13 @@ namespace algebra
                 u[abs(s_order-1)]=0;
                 //l{i,0}, u{i+1,0};
                 //row/column extraction with upper and lower bound
+                //@note very good
                 auto up_bound=map.lower_bound(u);
                 auto l_bound=map.lower_bound(l);
 
                 //update inner vector
+                //@note since the map is ordered theres is a way to avoid the use of distance, by looping over the 
+                // elements of the map and counting the number of elements in the row/column. But your solution is also fine, even if more complicated.
                 size_t num=std::distance(l_bound,up_bound);
                 inner.push_back(inner.back()+num);
 
@@ -137,6 +153,8 @@ namespace algebra
             inner.clear();
             outer.clear();
             values.clear();
+            //@note you are not freeing memory. For vectors clear() only set the size to zero 
+            // to clear memore you can use shrink_to_fit() after clear()
             compressed=false;
 
         };
@@ -160,14 +178,20 @@ namespace algebra
                 size_t start = inner[i];
                 size_t finish = inner[i + 1];
                 for (size_t j_l=start;j_l<finish; j_l++){
+                    //@note since outer is ordered you can use a binary search to find the element
                     if(outer[j_l]==j){
+                        //@note the correct things here is to return a reference to the value
+                        // return values[j_l];
                         ptr= &values[j_l];
                     }
                 }
+                //@note here you throw the eception.
                 //if the pair of subscripts wasn't found give error
                 if ((ptr== nullptr)){
                     throw std::runtime_error("Values cannot be added to compressed matrices");
                 }
+                //@note this is an ERROR! You are returning a reference to a local variable!
+                // The correct code is explained above. 
                 return *ptr;
             }
             else
@@ -195,11 +219,12 @@ namespace algebra
                 size_t finish = inner[i + 1];
 
                 for (size_t j_l = start; j_l <= finish; j_l++) {
+                    //@note also here you can use a binary search to speed up the search
                     if (outer[j_l] == j) {
                         return values[j_l];
                     }
                 }
-                return static_cast<T &> (0);
+                return static_cast<T &> (0); //@note why a static cast to a reference?
 
 
             } else {
